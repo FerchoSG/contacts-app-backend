@@ -1,0 +1,20 @@
+{
+  "name": "contactsapp",
+  "version": "1.0.0",
+  "description": "interview test",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon ./src/"
+  },
+  "author": "Fernando Sandoval",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.1.0",
+    "nodemon": "^2.0.4",
+    "sequelize": "^6.3.0"
+  }
+}
