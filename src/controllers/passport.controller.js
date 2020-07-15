@@ -1,36 +1,26 @@
-const passport = require('passport');
-const { Strategy } = require('passport-local');
-const User = require('../models/User');
-const { comparePasswords } = require('../services/password.service')
+const {Strategy, ExtractJwt} = require('passport-jwt')
+const {getPubKey} = require('../services/password.service')
+const User = require('../models/User')
+const passport = require('passport')
+const PUB_KEY = getPubKey()
 
-const customFields = { 
-    usernameField: "username",
-    passwordField: "password"
+const options = {
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: PUB_KEY,
+    algotithms: ['RS256']
 }
 
-function validationCallback(username, password, done){
-    User.findOne({where :{username}})
-        .then( async user =>{
-            if(!user) return done(null, false);
-
-            const isValidPassword = comparePasswords(password, user.password);
-
-            if(isValidPassword){ 
-                return done(null, user);
+const strategy = new Strategy(options, (payload, done)=>{
+    User.findOne({where: {id: payload.sub}})
+        .then(user =>{
+            if(user){
+                return done(null, user)
             } else {
-                return done(null, false);
+                return done(null, false)
             }
-        }).catch(error => done(error))
-}
-
-const strategy = new Strategy(customFields ,validationCallback);
-
-passport.use(strategy);
-
-passport.serializeUser((user, done) =>{ return done(null, user.id)});
-
-passport.deserializeUser((userId, done) =>{
-    User.findOne({where: {id: Number(userId)}})
-        .then(user => done(null, user))
-        .catch(error => done(error))
+        }).catch(error => done(error, null))
 })
+
+module.exports = (passport) =>{
+    passport.use(strategy)
+}

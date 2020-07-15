@@ -1,37 +1,22 @@
-const express = require('express');
-const router = require('./routes/index');
-const morgan = require('morgan');
-const passport = require('passport');
-const session = require('express-session');
-const sequelize = require('./config/database');
+const express = require('express')
+const router = require('./routes/')
+const morgan = require('morgan')
+const passport = require('passport')
+const cors = require('cors')
 
-const Store = require('connect-session-sequelize')(session.Store)
 const app = express();
 
-app.set('port', process.env.PORT || 4000);
+require('./controllers/passport.controller')(passport)
+
+app.set('port', process.env.PORT || 4000)
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
+app.use(cors())
+app.use(passport.initialize())
 
-const myStore = new Store({ db: sequelize })
-app.use(session({
-    secret: 'jnsldjkandljgsnd',
-    store: myStore,
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-        maxAge: 1000 * 60 * 60 * 24
-    }
-})); 
-
-require('./controllers/passport.controller'); 
-myStore.sync();
-
-app.use(passport.initialize());
-app.use(passport.session());
-
-app.use(morgan('dev'));
-app.use('/', router);
+app.use(morgan('dev'))
+app.use('/api/v1', router)
 app.get('*', (req, res) =>{
-    res.json({message: "Not Found"});
+    res.status(404).json({message: "Page Not Found"})
 });
-module.exports = app;
+module.exports = app

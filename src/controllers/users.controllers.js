@@ -30,6 +30,25 @@ class UserController{
         }
     }
 
+    static async getUserContacts(req, res){
+        const {id} = req.params
+        if(!Number(id)) return res.status(400).json({message: 'invalid id'})
+        const user = await UserService.getAUser(Number(id))
+        
+        if(!user) res.status(200).json({message: 'no user found'});
+
+        try {
+            const contacts = await UserService.getUserContacts(Number(id))
+
+            if(contacts) return res.status(200).json({data: contacts})
+
+            return res.status(200).json({message: 'User does not have contacts'});
+
+        } catch (error) {
+            res.status(400).json(error)
+        }
+    }
+
     static async addUser(req, res){
         const { name, username, email, password } = req.body;
         
@@ -68,7 +87,7 @@ class UserController{
 
         try {
             const userUpdated = await UserService.updateUser(Number(id), updateUser)
-            if(updateUser)
+            if(userUpdated)
                 return res.status(200).json({message: 'user updated'})
         } catch (error) {
             res.status(400).json(error)

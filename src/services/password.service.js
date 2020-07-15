@@ -1,13 +1,50 @@
-const bcrypt = require('bcrypt');
+const path = require('path')
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const {readFileSync} = require('fs')
 
-const saltRounds = 10;
+const saltRounds = 10
+
+function getPrivKey(){
+    const pathToKey = path.join(__dirname,'../utils/','id_rsa_priv.pem');
+    const PRIV_KEY = readFileSync(pathToKey, 'utf8');
+    return PRIV_KEY;
+}
+function getPubKey(){
+    const pathToKey = path.join(__dirname,'../utils/','id_rsa_pub.pem');
+    const PUB_KEY = readFileSync(pathToKey, 'utf8');
+    return PUB_KEY;
+}
 
 function generatePassword(password){
-    return bcrypt.hashSync(password, saltRounds);
+    return bcrypt.hashSync(password, saltRounds)
 }
 
 function comparePasswords(password, hashedPassword){
-    return bcrypt.compareSync(password, hashedPassword);
+    return bcrypt.compareSync(password, hashedPassword)
 }
 
-module.exports = {generatePassword, comparePasswords}
+function issueJWT(user){
+    const {id} = user
+    const expiresIn = '1d'
+
+    const payload = {
+        sub: id,
+        iat: Date.now()
+    }
+    const priv_key = getPrivKey();
+    const singedToken = jwt.sign(payload, priv_key, {expiresIn: expiresIn, algorithm: 'RS256'})
+
+    return {
+        token: "Bearer "+singedToken,
+        expiresIn: expiresIn
+    }
+}
+
+module.exports = {
+    generatePassword, 
+    comparePasswords,
+    getPrivKey,
+    getPubKey,
+    issueJWT
+}

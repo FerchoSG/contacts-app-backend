@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const Contact = require('../models/Contacts');
 
 class UserService {
     static async getAll(){
@@ -7,9 +8,12 @@ class UserService {
 
     static async getAUser(id){
         const user = User.findOne({where: {id}});
+        return user;
+    }
 
-        if(user) return user;
-        if(!user) return {message: 'User does not exists'};
+    static async getUserContacts(id){
+        const contacts = Contact.findAll({where: {user_id: id}});
+        return contacts
     }
 
     static async addUser(user){

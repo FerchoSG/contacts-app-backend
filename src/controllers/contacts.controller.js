@@ -30,9 +30,9 @@ class ContactController{
     }
 
     static async addContact(req, res){
-        const { firstName, lastName, email, contactNumber } = req.body;
+        const { firstName, lastName, email, contactNumber, user_id } = req.body;
         
-        const newContact = { firstName, lastName, email, contactNumber };
+        const newContact = { firstName, lastName, email, contactNumber, user_id };
         
         Object.entries(newContact).map((key, value)=>{
             if(key[1] === undefined || !key[1]) {
@@ -49,13 +49,13 @@ class ContactController{
 
     }
     static async updateContact(req, res){
-        const { firstName, lastName, email, contactNumber } = req.body;
+        const { firstName, lastName, email, contactNumber, user_id } = req.body;
         
         const {id} = req.params;
         
         if(!Number(id)) return res.status(400).json({message: 'invalid id'})
         
-        const updateContact = { firstName, lastName, email, contactNumber }
+        const updateContact = { firstName, lastName, email, contactNumber, user_id }
       
         Object.entries(updateContact).map((key, value)=>{
             if(key[1] === undefined || !key[1]) {
