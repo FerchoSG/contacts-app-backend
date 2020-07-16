@@ -8,11 +8,13 @@ const saltRounds = 10
 function getPrivKey(){
     const pathToKey = path.join(__dirname,'../utils/','id_rsa_priv.pem');
     const PRIV_KEY = readFileSync(pathToKey, 'utf8');
+    // const PRIV_KEY = process.env.PRIV_KEY   
     return PRIV_KEY;
 }
 function getPubKey(){
     const pathToKey = path.join(__dirname,'../utils/','id_rsa_pub.pem');
     const PUB_KEY = readFileSync(pathToKey, 'utf8');
+    // const PUB_KEY = process.env.PUB_KEY;
     return PUB_KEY;
 }
 
