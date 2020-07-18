@@ -4,6 +4,7 @@
   "description": "interview test",
   "main": "index.js",
   "scripts": {
+    "start": "node ./src/",
     "dev": "nodemon ./src/"
   },
   "author": "Fernando Sandoval",
