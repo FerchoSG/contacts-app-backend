@@ -39,7 +39,7 @@ function issueJWT(user){
     const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN)
 
     return {
-        token: accessToken
+        token: 'Bearer '+accessToken
     }
 }
 
