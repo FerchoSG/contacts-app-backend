@@ -35,11 +35,11 @@ function issueJWT(user){
     }
     const priv_key = getPrivKey();
     // jwt.sign()
-    // const singedToken = jwt.sign(payload, priv_key, {expiresIn: expiresIn, algorithm: 'RS256'})
-    const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN)
+    const singedToken = jwt.sign(payload, priv_key, {expiresIn: expiresIn, algorithm: 'RS256'})
+    // const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN)
 
     return {
-        token: 'Bearer '+accessToken
+        token: 'Bearer '+singedToken
     }
 }
 
