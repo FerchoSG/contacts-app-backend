@@ -28,18 +28,18 @@ function comparePasswords(password, hashedPassword){
 
 function issueJWT(user){
     const {id} = user
-    const expiresIn = '1d'
 
     const payload = {
         sub: id,
         iat: Date.now()
     }
     const priv_key = getPrivKey();
-    const singedToken = jwt.sign(payload, priv_key, {expiresIn: expiresIn, algorithm: 'RS256'})
+    // jwt.sign()
+    // const singedToken = jwt.sign(payload, priv_key, {expiresIn: expiresIn, algorithm: 'RS256'})
+    const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN)
 
     return {
-        token: "Bearer "+singedToken,
-        expiresIn: expiresIn
+        token: accessToken
     }
 }
 

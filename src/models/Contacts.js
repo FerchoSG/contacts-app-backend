@@ -18,8 +18,7 @@ const Contact = sequelize.define('Contact', {
     },
     email: {
         type: DataTypes.STRING,
-        allowNull: false,
-        unique: true
+        allowNull: false
     },
     contactNumber: {
         type: DataTypes.STRING,
