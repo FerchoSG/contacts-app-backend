@@ -1,6 +1,7 @@
 const User = require('../models/User')
 const UserSevice = require('./user.service')
 const passport = require('passport')
+const jwt = require('jsonwebtoken')
 const { comparePasswords, issueJWT } = require('./password.service')
 
 function authenticate(req, res, next){
@@ -25,7 +26,12 @@ function authenticate(req, res, next){
         })
 }
 
-const isAuth = passport.authenticate('jwt', {session: false})
+const isAuth = (req, res, next) =>{
+    jwt.verify(req.headers['authorization'], process.env.ACCESS_TOKEN, (err, user)=>{
+        if(err) return res.status(403).json({message: err})
+    })
+    next()
+}
 
 module.exports = {
     isAuth,
